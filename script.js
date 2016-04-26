@@ -1,10 +1,7 @@
 (function(window, saferoutes) {
 
-    // map options
     var options = saferoutes.MAP_OPTIONS;
     element = document.getElementById('map-canvas');
-
-    // map
     map = saferoutes.create(element, options);
 
     // fire off events
@@ -16,24 +13,42 @@
     // map._on('dragend', function(e) {
     //     alert('done dragging');
     // });
-    var marker = map.addMarker({
-        lat: 37,
-        lng: -122,
-        visible: true,
-        draggable: false,
-        id: 555,
-        icon: 'icons/fire.png',
-        content: '<div style="color: #f00;">I like food</div>'
-    });
-    var marker2 = map.addMarker({
-        lat: 37.2,
-        lng: -122.2,
-        visible: true,
-        draggable: false,
-        id: 556,
-        icon: 'icons/abduction.png',
-        content: '<div style="color: #f00;">' + 'test 2' + '</div>'
-    });
+    // var marker = map.addMarker({
+    //     lat: 37,
+    //     lng: -122,
+    //     visible: true,
+    //     draggable: false,
+    //     id: 555,
+    //     icon: 'icons/fire.png',
+    //     content: '<div style="color: #f00;">fire icon</div>'
+    // });
+    // var marker2 = map.addMarker({
+    //     lat: 37.2,
+    //     lng: -122.2,
+    //     visible: true,
+    //     draggable: false,
+    //     id: 556,
+    //     icon: 'icons/abduction.png',
+    //     content: '<div style="color: #00ff00;">' + 'test 2' + '</div>'
+    // });
+    // for (var i = 0; i < 40; i++) {
+    //     map.addMarker({
+    //         id: 1,
+    //         lat: 40.110833 + Math.random(),
+    //         lng: -88.226944 + Math.random(),
+    //         content: 'this is a fire icon',
+    //         icon: 'icons/fire.png'
+    //     })
+    // }
+    // for (var i = 0; i < 40; i++) {
+    //     map.addMarker({
+    //         id: 2,
+    //         lat: 40.110833 + Math.random(),
+    //         lng: -88.226944 + Math.random(),
+    //         content: 'this is a kidnap icon',
+    //         icon: 'icons/abduction.png'
+    //     })
+    // }
     // console.log(map.markers);
     // map._removeMarker(marker2);
     // var found = map.findMarkerByLat(37);
@@ -54,39 +69,39 @@
     //     alert(item);
     // });
 
-    function readfile(url) {
-        var file = new XMLHttpRequest();
-        file.overrideMimeType('text/plain');
-        file.open('GET', url, false);
-        var crimes = [];
-        file.onreadystatechange = function() {
-            if (file.readyState === 4) {
-                if (file.status === 200 || file.status == 0) {
-                    var text = file.responseText;
-                    var lines = text.split('\n');
+    // console.log(crimes);
+    // map.removeBy(function(marker) {
+    //     // if (marker.id === 2) {
+    //     //     console.log(marker);
+    //     // }
+    //     return marker.id === 2;
+    // });
 
-                    // read a file line by line
-                    for (var i = 0; i < lines.length; i++) {
-                        var m1 = /^0 -12 Td \((.+)\) Tj/.exec(lines[i]);
-                        if (m1 == null) {
-                            continue;
-                        }
-                        line = m1[1].trim();
-                        var m2 = /^C16\-\d\d\d\d\d(.+)/.exec(line);
-                        if (m2 != null) {
-                            console.log(m2[1]);
-                        }
-                        console.log('******************************');
+    for (var i = 4536; i < 4560; i++) {
+        dir = 'data/CPD' + i + '.PDF';
+        crimes = readfile(dir);
 
-                    }
-                }
-            }
+        for (var j = 0; j < crimes.length; j++) {
+            crime = crimes[j];
+            console.log(crime.location);
+            console.log('***************');
+            map.geocode({
+                address: crime.location,
+                success: function(results) {
+                    map.addMarker({
+                        lat: results[0].geometry.location.lat(),
+                        lng: results[0].geometry.location.lng(),
+                        content: 'test',
+                        icon: 'icons/abduction.png'
+                    })
+                },
+                error: function() {}
+            });
         }
-        file.send(null);
     }
-    readfile('CPD4538.PDF');
-    // var str = "LOCATION:   600 BLOCK OF E DANIEL ST                      KAMS BAR";
-    // var match = //
-    // console.log();
+
+
+
 
 }(window, window.SafeRoutes || (window.SafeRoutes = {})));
+    // <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDK5S9WRR-34aN7iiD9gOaC_PnW1b7IwTc"></script>

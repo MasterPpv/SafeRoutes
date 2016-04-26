@@ -4,9 +4,22 @@
     var SafeRoutes = (function() {
         function SafeRoutes(element, options) {
             this.gMap = new google.maps.Map(element, options);
+            this.geocoder = new google.maps.Geocoder();
             this.markers = List.create();
+            if (options.cluster) {
+                this.markerClusterer = new MarkerClusterer(this.gMap, [], options.clusterer);
+            }
         }
         SafeRoutes.prototype = {
+            geocode: function(options) {
+                this.geocoder.geocode({address: options.address}, function(results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        options.success.call(this, results, status);
+                    } else {
+                        options.error.call(this, status);
+                    }
+                });
+            },
             zoom: function(level) {
                 if (level) {
                     this.gMap.setZoom(level);
@@ -27,6 +40,9 @@
                     lng: options.lng
                 };
                 marker = this._createMarker(options);
+                if (options.cluster) {
+                    this.markerClusterer.addMarker(marker);
+                }
                 this.markers.add(marker);
                 if (options.event) {
                     this._on({
@@ -53,9 +69,14 @@
                 return this.markers.find(callback);
             },
             removeBy: function(callback) {
-                this.markers.find(callback, function(markers) {
+                var self = this;
+                self.markers.find(callback, function(markers) {
                     markers.forEach(function(marker) {
-                        marker.setMap(null);
+                        if (self.markerClusterer) {
+                            self.markerClusterer.removeMarker(marker);
+                        } else {
+                            marker.setMap(null);
+                        }
                     });
                 });
             },
