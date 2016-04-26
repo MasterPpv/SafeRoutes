@@ -77,26 +77,28 @@
     //     return marker.id === 2;
     // });
 
-    for (var i = 4536; i < 4560; i++) {
-        dir = 'data/CPD' + i + '.PDF';
+    for (var i = 4536; i < 4537; i++) {
+        var dir = 'data/CPD' + i + '.PDF';
         crimes = readfile(dir);
-
         for (var j = 0; j < crimes.length; j++) {
-            crime = crimes[j];
-            console.log(crime.location);
-            console.log('***************');
-            map.geocode({
+            var crime = crimes[j];
+
+            map.test({
                 address: crime.location,
                 success: function(results) {
+                    console.log(crime.location);
+                    console.log('***************');
                     map.addMarker({
                         lat: results[0].geometry.location.lat(),
                         lng: results[0].geometry.location.lng(),
-                        content: 'test',
+                        content: crime.location + '\n' + crime.summary,
                         icon: 'icons/abduction.png'
                     })
                 },
-                error: function() {}
-            });
+                error: function(status) {
+                    console.error(status);
+                }
+            })
         }
     }
 

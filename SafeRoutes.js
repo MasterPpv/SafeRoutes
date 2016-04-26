@@ -11,11 +11,15 @@
             }
         }
         SafeRoutes.prototype = {
-            geocode: function(options) {
+            test: function(options) {
                 this.geocoder.geocode({address: options.address}, function(results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         options.success.call(this, results, status);
-                    } else {
+                    }
+                    // else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                    //     setTimeout(function() { this.test(options); }, 200);
+                    // }
+                    else {
                         options.error.call(this, status);
                     }
                 });
