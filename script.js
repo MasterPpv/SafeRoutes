@@ -77,28 +77,75 @@
     //     return marker.id === 2;
     // });
 
-    for (var i = 4536; i < 4537; i++) {
+    function pin_icon(str) {
+
+        if (str.indexOf('VEHICLE') > -1) {
+            return 'icons/carrental.png'
+        }
+        if (str.indexOf('FIRE') > -1) {
+            return 'icons/fire.png'
+        }
+        if (str.indexOf('THEFT') > -1) {
+            return 'icons/bank.png'
+        }
+        if (str.indexOf('UNLAWFUL USE OF I.D.') > 1) {
+            return 'icons/bar.png'
+        }
+        if (str.indexOf('ALCOHOL') > 1) {
+            return 'icons/bar.png'
+        }
+        if (str.indexOf('SEX') > 1) {
+            return 'icons/rape.png'
+        }
+        if (str.indexOf('BURGLARY') > 1) {
+            return 'icons/bank.png'
+        }
+        if (str.indexOf('BATTERY') > 1) {
+            return 'icons/revolt.png'
+        }
+        if (str.indexOf('WEAPON') > 1) {
+            return 'icons/shooting.png'
+        }
+        if (str.indexOf('ROBBERY') > 1) {
+            return 'icons/shooting.png'
+        }
+        else {
+            return 'icons/caution.png'
+        }
+    }
+
+    for (var i = 4536; i < 4538; i++) {
         var dir = 'data/CPD' + i + '.PDF';
         crimes = readfile(dir);
         for (var j = 0; j < crimes.length; j++) {
             var crime = crimes[j];
+            map.addMarker({
+                lat: 40.04 + 0.13 * Math.random(),
+                lng: -88.3 + 0.13 * Math.random(),
+                content: '<div style="color: #000000;">TITLE: ' + crime.type + '</div><br/>' +
+                    '<div style="color: #000000;">CRIME ID: ' + crime.id + '</div><br/>' +
+                    '<div style="color: #000000;">DATE: ' + crime.date_occurred + ', ' + crime.time_occurred + '</div><br/>' +
+                    '<div style="color: #000000;">LOCATION: ' + crime.location + '</div><br/>' +
+                    '<div style="color: #000000;">DESCRIPTION: ' + crime.summary + '</div><br/>',
+                icon: pin_icon(crime.summary + crime.type)
+            });
 
-            map.test({
-                address: crime.location,
-                success: function(results) {
-                    console.log(crime.location);
-                    console.log('***************');
-                    map.addMarker({
-                        lat: results[0].geometry.location.lat(),
-                        lng: results[0].geometry.location.lng(),
-                        content: crime.location + '\n' + crime.summary,
-                        icon: 'icons/abduction.png'
-                    })
-                },
-                error: function(status) {
-                    console.error(status);
-                }
-            })
+            // map.test({
+            //     address: crime.location,
+            //     success: function(results) {
+            //         console.log(crime.location);
+            //         console.log('***************');
+            //         map.addMarker({
+            //             lat: results[0].geometry.location.lat(),
+            //             lng: results[0].geometry.location.lng(),
+            //             content: crime.location + '\n' + crime.summary,
+            //             icon: 'icons/abduction.png'
+            //         })
+            //     },
+            //     error: function(status) {
+            //         console.error(status);
+            //     }
+            // })
         }
     }
 

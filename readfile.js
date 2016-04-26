@@ -60,5 +60,5 @@ function readfile(url) {
         }
     }
     file.send(null);
-    return crimes.slice(1, 5);
+    return crimes;
 }

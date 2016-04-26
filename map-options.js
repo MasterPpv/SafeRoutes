@@ -5,7 +5,7 @@
             lat: 40.110833,
             lng: -88.226944
         },
-        zoom: 13,
+        zoom: 15,
         // disableDefaultUI: false,
         // scrollwheel: true,
         // draggable: true,
@@ -21,24 +21,24 @@
         // panControlOptions: {
         //     position: google.maps.ControlPosition.BOTTOM_RIGHT,
         // }
-        cluster: {
-            options: {
-                styles: [{
-                    url: 'clusterers/m1.png',
-                    height: 56,
-                    width: 55,
-                    textColor: '#f00',
-                    textSize: 14
-                },
-                {
-                    url: 'clusterers/m2.png',
-                    height: 56,
-                    width: 55,
-                    textColor: '#f00',
-                    textSize: 14
-                }]
-            }
-        }
+        // cluster: {
+        //     options: {
+        //         styles: [{
+        //             url: 'clusterers/m1.png',
+        //             height: 56,
+        //             width: 55,
+        //             textColor: '#f00',
+        //             textSize: 14
+        //         },
+        //         {
+        //             url: 'clusterers/m2.png',
+        //             height: 56,
+        //             width: 55,
+        //             textColor: '#f00',
+        //             textSize: 14
+        //         }]
+        //     }
+        // }
     };
 
 }(window, google, window.SafeRoutes || (window.SafeRoutes = {})));
