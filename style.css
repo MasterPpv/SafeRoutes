@@ -8,38 +8,49 @@ body {
 }
 #map-canvas {
     height: 100%;
-    z-index: -1;
 }
 
-#sidebar {
-	width:200px;
-	height:100%;
-	position:absolute;
-	background:#151719;
-	top: 0px;
-	left: -200px;
+.controls {
+    margin-top: 10px;
+    border: 1px solid transparent;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 32px;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
-#sidebar ul {
-	margin: 0px;
-	padding: 0px;
+
+#pac-input {
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 300px;
 }
-#sidebar ul li{
-	color:white;
-	padding:10px;
-	width:180px;
-	border-bottom:2px solid black;
-	display:block;
+
+#pac-input:focus {
+    border-color: #4d90fe;
 }
-#btn {
-	padding:20px;
-	margin:20px;
-	position:absolute;
-	left:0px;
+
+.pac-container {
+    font-family: Roboto;
 }
-#btn span{
-	width:25px;
-	height:5px;
-	background:black;
-	display:block;
-	margin-bottom:4px;
+
+#type-selector {
+    color: #fff;
+    background-color: #4d90fe;
+    padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 300;
+}
+#target {
+    width: 345px;
 }

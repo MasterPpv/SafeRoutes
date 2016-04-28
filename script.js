@@ -3,22 +3,83 @@
     var options = saferoutes.MAP_OPTIONS;
     element = document.getElementById('map-canvas');
     map = saferoutes.create(element, options);
-    var searchBox = new google.maps.places.SearchBox(document.getElementById('mapsearch'));
-    google.maps.event.addListener(searchBox, 'places_changed', function(){
 
-        var places = searchBox.getPlaces();
-        var marker = new google.maps.Marker({map:map.gMap})
-        var bounds = new google.maps.LatLngBounds();
-        var i, place;
+    var input = document.getElementById('pac-input');
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.gMap.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-        for(i = 0; place=places[i];i++) {
-            console.log(place.geometry.location);
-            bounds.extend(place.geometry.location);
-            marker.setPosition(place.geometry.location);
+    // Bias the SearchBox results towards current map.gMap's viewport.
+    map.gMap.addListener('bounds_changed', function() {
+      searchBox.setBounds(map.gMap.getBounds());
+    });
+
+    var markers = [];
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener('places_changed', function() {
+      var places = searchBox.getPlaces();
+
+      if (places.length == 0) {
+        return;
+      }
+
+      // Clear out the old markers.
+      markers.forEach(function(marker) {
+        marker.setMap(null);
+      });
+      markers = [];
+
+      // For each place, get the icon, name and location.
+      var bounds = new google.maps.LatLngBounds();
+      places.forEach(function(place) {
+        var icon = {
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        // Create a marker for each place.
+        markers.push(new google.maps.Marker({
+          map: map.gMap,
+          icon: icon,
+          title: place.name,
+          position: place.geometry.location
+        }));
+
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
         }
-        map.gMap.fitBounds(bounds);
-        map.gMap.setZoom(15);
-    }); 
+      });
+      map.gMap.fitBounds(bounds);
+    });
+
+    // var input = document.getElementById('mapsearch')
+    // var searchBox = new google.maps.places.SearchBox(input);
+    // map.gMap.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    // map.gMap.addListener('bounds_changed', function() {
+    //     searchBox.setBounds(map.gMap.getBounds());
+    // });
+    // google.maps.event.addListener(searchBox, 'places_changed', function(){
+
+    //     var places = searchBox.getPlaces();
+    //     var marker = new google.maps.Marker({map:map.gMap})
+    //     var bounds = new google.maps.LatLngBounds();
+    //     var i, place;
+
+    //     for(i = 0; place=places[i];i++) {
+    //         console.log(place.geometry.location);
+    //         bounds.extend(place.geometry.location);
+    //         marker.setPosition(place.geometry.location);
+    //     }
+    //     map.gMap.fitBounds(bounds);
+    //     // map.gMap.setZoom(15);
+    //     map.gMap.setCenter(marker.getPosition());
+    // });
     // fire off events
     // map._on('click', function(e) {
     //     alert('you have just clicked');
@@ -163,6 +224,9 @@
             // })
         }
     }
+    // google.maps.event.addListener(map.gMap, "click", function(event) {
+    //     infowindow.close();
+    // });
  /*   var searchBox = new google.maps.places.SearchBox(document.getElementById('mapsearch'));
 
 // place change event on search box

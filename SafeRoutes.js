@@ -1,25 +1,21 @@
 (function(window, google, List){
 
-    // just like creating an object but it stores a function not an object
     var SafeRoutes = (function() {
         function SafeRoutes(element, options) {
             this.gMap = new google.maps.Map(element, options);
             this.geocoder = new google.maps.Geocoder();
             this.markers = List.create();
+            this.prev_info = false;
             if (options.cluster) {
                 this.markerClusterer = new MarkerClusterer(this.gMap, [], options.clusterer);
             }
         }
         SafeRoutes.prototype = {
-            test: function(options) {
+            geocode: function(options) {
                 this.geocoder.geocode({address: options.address}, function(results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         options.success.call(this, results, status);
-                    }
-                    // else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-                    //     setTimeout(function() { this.test(options); }, 200);
-                    // }
-                    else {
+                    } else {
                         options.error.call(this, status);
                     }
                 });
@@ -38,7 +34,8 @@
                 });
             },
             addMarker: function(options) {
-                var marker;
+                var marker,
+                    self = this;
                 options.position = {
                     lat: options.lat,
                     lng: options.lng
@@ -48,24 +45,20 @@
                     this.markerClusterer.addMarker(marker);
                 }
                 this.markers.add(marker);
-                if (options.event) {
-                    this._on({
-                        obj: marker,
-                        event: options.event.name,
-                        callback: options.event.callback
-                    });
-                }
                 if (options.content) {
                     this._on({
                         obj: marker,
                         event: 'click',
                         callback: function () {
-                            var info = new google.maps.InfoWindow({
-                                content: options.content
-                            });
+                            var info = new google.maps.InfoWindow({ content: options.content });
+                            console.log(info);
+                            if( this.prev_info ) {
+                                this.prev_info.close();
+                            }
+                            this.prev_info = info;
                             info.open(this.gMap, marker);
                         }
-                    })
+                    });
                 }
                 return marker;
             },
