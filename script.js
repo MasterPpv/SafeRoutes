@@ -3,7 +3,22 @@
     var options = saferoutes.MAP_OPTIONS;
     element = document.getElementById('map-canvas');
     map = saferoutes.create(element, options);
+    var searchBox = new google.maps.places.SearchBox(document.getElementById('mapsearch'));
+    google.maps.event.addListener(searchBox, 'places_changed', function(){
 
+        var places = searchBox.getPlaces();
+        var marker = new google.maps.Marker({map:map.gMap})
+        var bounds = new google.maps.LatLngBounds();
+        var i, place;
+
+        for(i = 0; place=places[i];i++) {
+            console.log(place.geometry.location);
+            bounds.extend(place.geometry.location);
+            marker.setPosition(place.geometry.location);
+        }
+        map.gMap.fitBounds(bounds);
+        map.gMap.setZoom(15);
+    }); 
     // fire off events
     // map._on('click', function(e) {
     //     alert('you have just clicked');
@@ -148,7 +163,24 @@
             // })
         }
     }
+ /*   var searchBox = new google.maps.places.SearchBox(document.getElementById('mapsearch'));
 
+// place change event on search box
+    google.maps.event.addListener(searchBox, 'places_changed', function(){
+
+  var places = searchBox.getPlaces();
+  var marker = new google.maps.Marker({map:map.gMap})
+  var bounds = new google.maps.LatLngBounds();
+  var i, place;
+
+  for(i = 0; place=places[i];i++) {
+    console.log(place.geometry.location);
+    bounds.extend(place.geometry.location);
+    marker.setPosition(place.geometry.location);
+  }
+  map.gMap.fitBounds(bounds);
+  map.gMap.setZoom(15);
+}); */
 
 
 

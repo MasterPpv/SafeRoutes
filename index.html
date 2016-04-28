@@ -7,15 +7,36 @@
 </head>
 
 <body>
-    <div id="map-canvas"></div>
     <script src="jquery-2.2.3.min.js"></script>
-    <script src="http://maps.google.com/maps/api/js"></script>
+    <input type="text" id="mapsearch"> 
+    <div id = "sidebar">
+        <ul>
+            <li>Facebook</li>
+            <li>VK</li>
+            <li>Google</li>
+            <li>Twitter</li>
+        </ul>
+    </div>
+    <div id="btn" onclick="show(sidebar)">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <script src="sidebar.js"></script>
+   <!-- <div id = "first">
+    <button type="submit" style="background-color:transparent; border-color:transparent;"> 
+    <img src="direction.png" height="15"></button></div> -->
+    
+    <div id="map-canvas"></div> 
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADABTiyYs23aBwbA2o_f17dKTEB-zGyUY&libraries=places" type="text/javascript"></script>
     <script src="markerclusterer.js"></script>
     <script src="List.js"></script>
     <script src="SafeRoutes.js"></script>
     <script src="map-options.js"></script>
     <script src="readfile.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js"></script> 
+  <!--  <script src="search.js"></script> -->
+
 </body>
 </html>
 
