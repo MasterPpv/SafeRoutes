@@ -8,6 +8,7 @@ body {
 }
 #map-canvas {
     height: 100%;
+    z-index: 0;
 }
 
 .controls {
@@ -54,3 +55,31 @@ body {
 #target {
     width: 345px;
 }
+
+#sidebar {
+    width:200px;
+    height:100%;
+    position:absolute;
+    background:#151719;
+    top: 0px;
+    left: -200px;
+}
+#sidebar ul {
+    margin: 0px;
+    padding: 0px;
+}
+#sidebar ul li{
+    color:white;
+    padding:10px;
+    width:180px;
+    border-bottom:2px solid black;
+    display:block;
+}
+#btn {
+    padding:0px;
+    margin:0px;
+    position:absolute;
+    left:430px;
+    top: 10px;
+}
+
