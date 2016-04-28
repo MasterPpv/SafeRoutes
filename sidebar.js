@@ -8,7 +8,7 @@ function show(sidebar){
 	}
 	else
 	{
-		sidebar.style.left = "-200px";
+		sidebar.style.left = "-300px";
 		sidebar.style.transition = "left 0.6s linear";
 		status = 0;
 	}
