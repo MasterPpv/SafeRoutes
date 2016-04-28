@@ -51,7 +51,6 @@
                         event: 'click',
                         callback: function () {
                             var info = new google.maps.InfoWindow({ content: options.content });
-                            console.log(info);
                             if( this.prev_info ) {
                                 this.prev_info.close();
                             }
@@ -65,18 +64,33 @@
             findBy: function(callback) {
                 return this.markers.find(callback);
             },
-            removeBy: function(callback) {
+            hideBy: function(callback) {
                 var self = this;
                 self.markers.find(callback, function(markers) {
                     markers.forEach(function(marker) {
                         if (self.markerClusterer) {
                             self.markerClusterer.removeMarker(marker);
                         } else {
-                            marker.setMap(null);
+                            // marker.setMap(null);
+                            marker.setVisible(false);
                         }
                     });
                 });
             },
+            showBy: function(callback) {
+                var self = this;
+                self.markers.find(callback, function(markers) {
+                    markers.forEach(function(marker) {
+                        if (self.markerClusterer) {
+                            self.markerClusterer.removeMarker(marker);
+                        } else {
+                            // marker.setMap(null);
+                            marker.setVisible(true);
+                        }
+                    });
+                });
+            },
+
             _createMarker: function(options) {
                 options.map = this.gMap;
                 return new google.maps.Marker(options);

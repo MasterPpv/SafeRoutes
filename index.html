@@ -10,12 +10,11 @@
     <script src="jquery-2.2.3.min.js"></script>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map-canvas"></div>
-    <div id="sidebar">
+    <div id="sidebar_dir">
     <ul>
         <li>
             <div id="mode-selector" class="controls">
-            <input type="radio" name="type" id="changemode-walking"
-            checked="checked">
+            <input type="radio" name="type" id="changemode-walking" checked="checked">
             <label for="changemode-walking">Walking</label>
             <input type="radio" name="type" id="changemode-transit">
             <label for="changemode-transit">Transit</label>
@@ -33,11 +32,28 @@
         </li>
     </ul>
     </div>
-    
-    <div id="btn" onclick="show(sidebar)">
+    <div id="btn_dir" onclick="show_dir(sidebar_dir)">
     <button type="submit">
-    <script src="sidebar.js"></script>
+    <script src="sidebars.js"></script>
     <img src="direction.png" height="26"></button></div>
+
+    <div id="sidebar_menu">
+    <ul>
+        <li>
+            <form action="demo_form.asp" method="get">
+                <input type="checkbox" name="crime" id="Assault" onchange="checkbox_changed()" checked>Assault<br>
+                <input type="checkbox" name="crime" id="Theft" onchange="checkbox_changed()" checked>Theft<br>
+                <input type="checkbox" name="crime" id="Fire" onchange="checkbox_changed()" checked>Fire<br>
+                <input type="checkbox" name="crime" id="Other" onchange="checkbox_changed()" checked>Other<br>
+                <!-- <input type="submit" value="Submit"> -->
+            </form>
+        </li>
+    </ul>
+    </div>
+    <div id="btn_menu" onclick="show_menu(sidebar_menu)">
+    <button type="submit">
+    <script src="sidebars.js"></script>
+    <img src="menu.png" height="26"></button></div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADABTiyYs23aBwbA2o_f17dKTEB-zGyUY&libraries=places" type="text/javascript"></script>
     <script src="markerclusterer.js"></script>
