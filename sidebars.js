@@ -1,31 +1,17 @@
-var status_dir = 0;
-function show_dir(sidebar){
-
-    if(status_dir == 0) {
-        sidebar.style.left = "0px";
-        sidebar.style.transition = "left 0.6s linear";
-        status_dir = 1;
-    }
-    else
-    {
-        sidebar.style.left = "-300px";
-        sidebar.style.transition = "left 0.6s linear";
-        status_dir = 0;
-    }
-}
-
 var status_menu = 0;
-function show_menu(sidebar){
+var alt_menu = 0;
+function show_menu(sidebar, sidebar1){
 
     if(status_menu == 0) {
+        sidebar1.style.left = "-300px";
         sidebar.style.left = "0px";
-        sidebar.style.transition = "left 0.6s linear";
+        sidebar.style.transition = "left 0.4s linear";
         status_menu = 1;
     }
-    else
+    else 
     {
         sidebar.style.left = "-300px";
-        sidebar.style.transition = "left 0.6s linear";
+        sidebar.style.transition = "left 0.4s linear";
         status_menu = 0;
     }
-}
+} 
