@@ -9,11 +9,9 @@ body {
 #map-canvas {
     height: 100%;
     z-index: 0;
-
-        float: left;
-        width: 63%;
+    float: left;
+    width: 100%;
 }
-
 .controls {
     margin-top: 10px;
     border: 1px solid transparent;
@@ -24,8 +22,7 @@ body {
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
-
-#pac-input {
+#search-input {
     background-color: #fff;
     font-family: Roboto;
     font-size: 15px;
@@ -35,21 +32,27 @@ body {
     text-overflow: ellipsis;
     width: 300px;
 }
-
-#pac-input:focus {
+#search-input:focus {
     border-color: #4d90fe;
 }
-
-.pac-container {
+#origin-input, #destination-input {
+    background-color: #fff;
     font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 280px;
 }
-
-#type-selector {
+/*.pac-container {
+    font-family: Roboto;
+}*/
+/*#type-selector {
     color: #fff;
     background-color: #4d90fe;
     padding: 5px 11px 0px 11px;
 }
-
 #type-selector label {
     font-family: Roboto;
     font-size: 13px;
@@ -58,52 +61,33 @@ body {
 #target {
     width: 345px;
 }
-
-#sidebar_dir {
-    width:200px;
+*/
+#sidebar-menu, #sidebar-dir {
+    width:300px;
     height:100%;
     position:absolute;
-    background:#9999ff;
+    background:#ffffff;
     top: 0px;
-    left: -200px;
+    left: -300px;
 }
-#sidebar_dir ul {
+/*#sidebar-menu ul, #sidebar-dir ul {
     margin: 0px;
     padding: 0px;
 }
-#sidebar_dir ul li{
+#sidebar-menu ul li, #sidebar-dir ul li{
     color:white;
     padding:10px;
     width:180px;
     display:block;
-}
-#btn_dir {
+}*/
+#button-dir {
     padding:0px;
     margin:0px;
     position:absolute;
     left:300px;
     top: 10px;
 }
-
-#sidebar_menu {
-    width:200px;
-    height:100%;
-    position:absolute;
-    background:#9999ff;
-    top: 0px;
-    left: -200px;
-}
-#sidebar_menu ul {
-    margin: 0px;
-    padding: 0px;
-}
-#sidebar_menu ul li{
-    color:white;
-    padding:10px;
-    width:180px;
-    display:block;
-}
-#btn_menu {
+#button-menu {
     padding:0px;
     margin:0px;
     position:absolute;
@@ -111,30 +95,27 @@ body {
     top: 10px;
 }
 
+/*#right-panel {
+    font-family: 'Roboto','sans-serif';
+    line-height: 30px;
+    padding-left: 10px;
+}
+#right-panel select, #right-panel input {
+    font-size: 15px;
+}
+#right-panel select {
+    width: 100%;
+}
+#right-panel i {
+    font-size: 12px;
+}
 #right-panel {
-        font-family: 'Roboto','sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-      }
-
-      #right-panel select, #right-panel input {
-        font-size: 15px;
-      }
-
-      #right-panel select {
-        width: 100%;
-      }
-
-      #right-panel i {
-        font-size: 12px;
-      }
-      #right-panel {
-        float: right;
-        width: 34%;
-        height: 100%;
-      }
-      .panel {
-        height: 100%;
-        overflow: auto;
-      }
-
+    float: left;
+    width: 34%;
+    height: 100%;
+}
+.panel {
+    height: 100%;
+    overflow: auto;
+}
+*/

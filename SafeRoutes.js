@@ -9,7 +9,9 @@
             if (options.cluster) {
                 this.markerClusterer = new MarkerClusterer(this.gMap, [], options.clusterer);
             }
+            this.directions = List.create();
         }
+
         SafeRoutes.prototype = {
             geocode: function(options) {
                 this.geocoder.geocode({address: options.address}, function(results, status) {

@@ -7,62 +7,69 @@
 </head>
 
 <body>
-    <script src="jquery-2.2.3.min.js"></script>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <input id="search-input" class="controls" type="text" placeholder="Enter a location">
     <div id="map-canvas"></div>
-
-
-    <div id="sidebar_dir">
-    <ul>
-        <li>
-            <input type="radio" name="type" id="changemode-walking" checked="checked">
-            <label for="changemode-walking">Walking</label>
-            <input type="radio" name="type" id="changemode-transit">
-            <label for="changemode-transit">Transit</label>
-            <input type="radio" name="type" id="changemode-driving">
-            <label for="changemode-driving">Driving</label>
-        </li>
-        <li>
-            <input id="origin-input" class="controls" type="text"
-            placeholder="Enter an origin location">
-        </li>
-        <li>
-            <input id="destination-input" class="controls" type="text"
-            placeholder="Enter a destination location">
-        </li>
-        <li>
-            <div id="search"><button type="submit">Search</button></div>
-        </li>
-    </ul>
+    <div id="sidebar-dir">
+        <form id="mode-selector">
+            <fieldset>
+            <legend>Travel Mode</legend>
+                <input type="radio" name="mode" id="walking" checked>Walking<br/>
+                <input type="radio" name="mode" id="transit">Transit<br/>
+                <input type="radio" name="mode" id="driving">Driving<br/>
+            </fieldset>
+        </form></br>
+        <input id="origin-input" class="controls" type="text" placeholder="Enter an origin location">
+        <input id="destination-input" class="controls" type="text" placeholder="Enter a destination location">
+        <div id="search">
+            <button type="submit">Search</button>
+        </div>
+        <div id="steps-panel">
+            <p><span id="total"></span></p>
+        </div>
     </div>
-    <div id="btn_dir" onclick="show_menu(sidebar_dir, sidebar_menu)">
-    <button type="submit">
+    <div id="button-dir" onclick="change_sidebar(1);">
+        <button type="submit" title="Directions">
+            <img src="direction.png" height="26">
+        </button>
+    </div>
+
+    <div id="sidebar-menu">
+        <form id="type-filter" action="demo_form.asp" method="get">
+            <fieldset>
+            <legend>Filter by Types</legend>
+                <input type="checkbox" name="crime" id="assault" checked>Assault<br/>
+                <input type="checkbox" name="crime" id="theft" checked>Theft<br/>
+                <input type="checkbox" name="crime" id="fire" checked>Fire<br/>
+                <input type="checkbox" name="crime" id="robbery" checked>Robbery<br/>
+                <input type="checkbox" name="crime" id="sexual-assault" checked>Sexual Assault<br/>
+                <input type="checkbox" name="crime" id="other" checked>Other<br/>
+            </fieldset>
+        </form><br/>
+        <form id="date-filter">
+            <fieldset>
+            <legend>Filter by Dates</legend>
+                <input type="radio" name="dates" id="all-dates" checked>All Dates<br/>
+                <input type="radio" name="dates" id="month">Month to Date<br/>
+                <input type="radio" name="dates" id="two-weeks">Two Weeks to Date<br/>
+                <input type="radio" name="dates" id="week">Week to Date<br/>
+            </fieldset>
+        </form></br>
+<!--         <form id="time-filter">
+            <fieldset>
+            <legend>Filter by Times</legend>
+                <input type="radio" name="dates" id="all-dates" checked>All Dates<br/>
+                <input type="radio" name="dates" id="month">Month to Date<br/>
+                <input type="radio" name="dates" id="week">Week to Date<br/>
+            </fieldset>
+        </form></br> -->
+    </div>
+    <div id="button-menu" onclick="change_sidebar(0);">
+        <button type="submit" title="Menu">
+        <img src="menu.png" height="26"></button>
+    </div>
+
+
     <script src="sidebars.js"></script>
-    <img src="direction.png" height="26"></button></div>
-
-    <div id="right-panel">
-      <p><span id="total"></span></p>
-    </div>
-
-    <div id="sidebar_menu">
-    <ul>
-        <li>
-            <form action="demo_form.asp" method="get">
-                <input type="checkbox" name="crime" id="Assault" onchange="checkbox_changed()" checked>Assault<br>
-                <input type="checkbox" name="crime" id="Theft" onchange="checkbox_changed()" checked>Theft<br>
-                <input type="checkbox" name="crime" id="Fire" onchange="checkbox_changed()" checked>Fire<br>
-                <input type="checkbox" name="crime" id="Other" onchange="checkbox_changed()" checked>Other<br>
-                <!-- <input type="submit" value="Submit"> -->
-            </form>
-        </li>
-    </ul>
-    </div>
-    <div id="btn_menu" onclick="show_menu(sidebar_menu, sidebar_dir)">
-    <button type="submit">
-    <script src="sidebars.js"></script>
-    <img src="menu.png" height="26"></button></div>
-
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADABTiyYs23aBwbA2o_f17dKTEB-zGyUY&libraries=places" type="text/javascript"></script>
     <script src="markerclusterer.js"></script>
     <script src="List.js"></script>
@@ -71,8 +78,5 @@
     <script src="readfile.js"></script>
     <script src="script.js"></script>
 
-
-
 </body>
 </html>
-
