@@ -160,10 +160,9 @@
         }, function (response, status) {
             if (status === google.maps.DirectionsStatus.OK) {
                 for (var i = 0; i < response.routes.length; i++) {
-                    console.log(response.routes[i].summary);
-                    // response.routes[i].summary =+ "  (Safety Rating = " + (Math.floor(50 * Math.random()) + 50) / 10 + ")";
+                    var rating = 5 + rd(5 * Math.random(), 2);
+                    response.routes[i].summary += "  (" + rating + ")";
                 }
-                console.log(response.routes);
                 directionsDisplay.setDirections(response);
             } else {
                 window.alert('Directions request failed due to ' + status);
@@ -171,41 +170,51 @@
         });
     }
 
+    function rd(number, digit) {
+        return Number((number).toFixed(digit));
+    }
+
     function pin_icon(str) {
         // if (str.indexOf('VEHICLE') > -1) {
         //     return 'icons/carrental.png'
         // }
+        if (str.indexOf('CURRENCY') > -1) {
+            return 'icons/bank.png'
+        }
+        if (str.indexOf('FRAUDULENT CHECK') > -1) {
+            return 'icons/bank.png'
+        }
         if (str.indexOf('FIRE') > -1) {
             return 'icons/fire.png'
         }
         if (str.indexOf('THEFT') > -1) {
             return 'icons/bank.png'
         }
-        if (str.indexOf('FIREARM') > 1) {
+        if (str.indexOf('FIREARM') > -1) {
             return 'icons/shooting.png'
         }
-        if (str.indexOf('ALCOHOL') > 1) {
+        if (str.indexOf('ALCOHOL') > -1) {
             return 'icons/bar.png'
         }
-        if (str.indexOf('SEX') > 1) {
+        if (str.indexOf('SEX') > -1) {
             return 'icons/rape.png'
         }
-        if (str.indexOf('RAPE') > 1) {
+        if (str.indexOf('RAPE') > -1) {
             return 'icons/rape.png'
         }
-        if (str.indexOf('BURGLARY') > 1) {
+        if (str.indexOf('BURGLARY') > -1) {
             return 'icons/robbery.png'
         }
-        if (str.indexOf('BATTERY') > 1) {
+        if (str.indexOf('BATTERY') > -1) {
             return 'icons/revolt.png'
         }
-        if (str.indexOf('WEAPON') > 1) {
+        if (str.indexOf('WEAPON') > -1) {
             return 'icons/shooting.png'
         }
-        if (str.indexOf('ROBBERY') > 1) {
+        if (str.indexOf('ROBBERY') > -1) {
             return 'icons/robbery.png'
         }
-        if (str.indexOf('MONEY') > 1) {
+        if (str.indexOf('MONEY') > -1) {
             return 'icons/bank.png'
         }
         else {
@@ -249,32 +258,66 @@
         }
     }
 
-    var crime_types = {
-        'assault': 'revolt.png',
-        'theft': 'bank.png',
-        'fire': 'fire.png',
-        'robbery': 'robbery.png',
-        'sexual-assault': 'rape.png',
-        'other': 'caution.png'
+
+    // function condition(marker, start_date, times_filter_index) {
+    //     var date_condition = (new Date(marker.crime.date_occurred)).getTime() > start_date.getTime();
+
+    //     return date_condition;
+    // }
+
+    function create_date_condition(start_date) {
+        return function(marker) {
+            return (new Date(marker.crime.date_occurred)).getTime() > start_date.getTime();
+        };
+    }
+    function create_time_condition(start_hour, end_hour) {
+
+        return function(marker) {
+            if (marker.crime.time_occurred) {
+                var hm = marker.crime.time_occurred.split(':');
+                var minutes_from_midnight = (+hm[0]) * 60 + (+hm[1]);
+                var left_bound = start_hour * 60;
+                var right_bound = end_hour * 60;
+                return (left_bound <= minutes_from_midnight) && (minutes_from_midnight < right_bound);
+            } else {
+                return true;
+            }
+        };
     }
 
-    function check(crime_type, start_date) {
+    function f_and(f1, f2) {
+        return function(marker){ return f1(marker) && f2(marker);};
+    }
+
+    function f_or(f1, f2) {
+        return function(marker){ return f1(marker) || f2(marker);};
+    }
+
+    function f_not(f) {
+        return function(marker){ return !f(marker);};
+    }
+
+    function check(crime_type, start_date, times_filters) {
+        var date_condition = create_date_condition(start_date);
+        var time_conditions = function(marker){ return false; };
+        for (var i = 0; i < times_filters.length; i++) {
+            if (times_filters[i].checked) {
+                var new_time_condition = create_time_condition((+i) * 3,((+i) + 1) * 3);
+                time_conditions = f_or(time_conditions, new_time_condition);
+            }
+        }
+        var icon_condition = function(marker){ return marker.icon === 'icons/' + crime_types[crime_type]; };
+        var all_conditions = f_and(date_condition, time_conditions);
+        var neg_all_conditions = f_not(all_conditions);
 
         if (document.getElementById(crime_type).checked) {
-            map.showBy(function(marker) {
-                var date_condition = (new Date(marker.crime.date_occurred)).getTime() > start_date.getTime();
-                return marker.icon === 'icons/' + crime_types[crime_type] && date_condition;
-            });
-            map.hideBy(function(marker) {
-                var date_condition = (new Date(marker.crime.date_occurred)).getTime() > start_date.getTime();
-                return marker.icon === 'icons/' + crime_types[crime_type] && !date_condition;
-            });
+            map.showBy(f_and(icon_condition, all_conditions));
+            map.hideBy(f_and(icon_condition, neg_all_conditions));
         } else {
-            map.hideBy(function(marker) {
-                return marker.icon === 'icons/' + crime_types[crime_type];
-            });
+            map.hideBy(icon_condition);
         }
     }
+    var prev_select_all_crimes = true;
 
     function checkbox_changed() {
         if (document.getElementById('all-dates').checked) {
@@ -290,17 +333,44 @@
             var start_date = new Date(new Date() - 7 * 24 * 3600 * 1000);
         }
 
+        var current_select_all_crimes = document.getElementById('all-crimes').checked;
+        if (current_select_all_crimes != prev_select_all_crimes) {
+            for (var crime_type in crime_types) {
+                document.getElementById(crime_type).checked = current_select_all_crimes;
+            }
+            prev_select_all_crimes = current_select_all_crimes;
+        }
         for (var crime_type in crime_types) {
-            check(crime_type, start_date);
+            check(crime_type, start_date, times_filters);
         }
     }
 
+    var crime_types = {
+        'assault': 'revolt.png',
+        'theft': 'bank.png',
+        'fire': 'fire.png',
+        'robbery': 'robbery.png',
+        'sexual-assault': 'rape.png',
+        'firearm': 'shooting.png',
+        'drug-alcohol': 'bar.png',
+        'other': 'caution.png'
+    }
     for (var crime_type in crime_types) {
         document.getElementById(crime_type).onchange = checkbox_changed;
     }
+    document.getElementById('all-crimes').onchange = checkbox_changed;
+
     var dates_filters = ['all-dates', 'month', 'two-weeks', 'week'];
     for (var i in dates_filters) {
         document.getElementById(dates_filters[i]).onchange = checkbox_changed;
     }
+
+    var times_filters = document.getElementsByName('times');
+    for (var i = 0; i < times_filters.length; i++) {
+        times_filters[i].onchange = checkbox_changed;
+    }
+
+
+
 
 }(window, window.SafeRoutes || (window.SafeRoutes = {})));

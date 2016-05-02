@@ -42,7 +42,10 @@
                 <input type="checkbox" name="crime" id="fire" checked>Fire<br/>
                 <input type="checkbox" name="crime" id="robbery" checked>Robbery<br/>
                 <input type="checkbox" name="crime" id="sexual-assault" checked>Sexual Assault<br/>
+                <input type="checkbox" name="crime" id="firearm" checked>Firearm<br/>
+                <input type="checkbox" name="crime" id="drug-alcohol" checked>Drug/Alcohol<br/>
                 <input type="checkbox" name="crime" id="other" checked>Other<br/>
+                <input type="checkbox" name="crime" id="all-crimes" checked>Select All<br/>
             </fieldset>
         </form><br/>
         <form id="date-filter">
@@ -54,20 +57,24 @@
                 <input type="radio" name="dates" id="week">Week to Date<br/>
             </fieldset>
         </form></br>
-<!--         <form id="time-filter">
+        <form id="time-filter" action="demo_form.asp" method="get">
             <fieldset>
             <legend>Filter by Times</legend>
-                <input type="radio" name="dates" id="all-dates" checked>All Dates<br/>
-                <input type="radio" name="dates" id="month">Month to Date<br/>
-                <input type="radio" name="dates" id="week">Week to Date<br/>
+                <input type="checkbox" name="times" id="slot-1" checked>[12 AM, 3 AM)<br/>
+                <input type="checkbox" name="times" id="slot-2" checked>[3 AM, 6 AM)<br/>
+                <input type="checkbox" name="times" id="slot-3" checked>[6 AM, 9 AM)<br/>
+                <input type="checkbox" name="times" id="slot-4" checked>[9 AM, 12 PM)<br/>
+                <input type="checkbox" name="times" id="slot-5" checked>[12 PM, 3 PM)<br/>
+                <input type="checkbox" name="times" id="slot-6" checked>[3 PM, 6 PM)<br/>
+                <input type="checkbox" name="times" id="slot-7" checked>[6 PM, 9 PM)<br/>
+                <input type="checkbox" name="times" id="slot-8" checked>[9 PM, 12 AM)<br/>
             </fieldset>
-        </form></br> -->
+        </form></br>
     </div>
     <div id="button-menu" onclick="change_sidebar(0);">
         <button type="submit" title="Menu">
         <img src="menu.png" height="26"></button>
     </div>
-
 
     <script src="sidebars.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADABTiyYs23aBwbA2o_f17dKTEB-zGyUY&libraries=places" type="text/javascript"></script>

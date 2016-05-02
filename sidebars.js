@@ -22,6 +22,6 @@ function open_sidebar(sidebar) {
 }
 
 function close_sidebar(sidebar) {
-    sidebar.style.left = "-300px";
+    sidebar.style.left = "-400px";
     sidebar.style.transition = "left 0.4s linear";
 }
