@@ -62,7 +62,7 @@ body {
     width: 345px;
 }
 */
-#sidebar-menu, #sidebar-dir {
+#sidebar-menu, #sidebar-dir, #sidebar-submit {
     width:400px;
     height:100%;
     position:absolute;
@@ -92,6 +92,14 @@ body {
     margin:0px;
     position:absolute;
     left:442px;
+    top: 10px;
+}
+
+#button-submit {
+    padding:0px;
+    margin:0px;
+    position:absolute;
+    left:484px;
     top: 10px;
 }
 

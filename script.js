@@ -5,7 +5,6 @@
     element = document.getElementById('map-canvas');
     map = saferoutes.create(element, options);
 
-
     // create searchbox and position it
     var search_input = document.getElementById('search-input');
     var search_box = new google.maps.places.SearchBox(search_input);
@@ -160,7 +159,7 @@
         }, function (response, status) {
             if (status === google.maps.DirectionsStatus.OK) {
                 for (var i = 0; i < response.routes.length; i++) {
-                    var rating = 5 + rd(5 * Math.random(), 2);
+                    var rating = Math.floor(50 * Math.random() + 50) / 10;
                     response.routes[i].summary += "  (" + rating + ")";
                 }
                 directionsDisplay.setDirections(response);
@@ -170,14 +169,15 @@
         });
     }
 
-    function rd(number, digit) {
-        return Number((number).toFixed(digit));
-    }
+    // function rd(number, digit) {
+    //     return Number((number).toFixed(digit));
+    // }
 
     function pin_icon(str) {
         // if (str.indexOf('VEHICLE') > -1) {
         //     return 'icons/carrental.png'
         // }
+        str = str.toUpperCase();
         if (str.indexOf('CURRENCY') > -1) {
             return 'icons/bank.png'
         }
@@ -217,6 +217,9 @@
         if (str.indexOf('MONEY') > -1) {
             return 'icons/bank.png'
         }
+        if (str.indexOf('SHOOTING') > -1) {
+            return 'icons/shooting.png'
+        }
         else {
             return 'icons/caution.png'
         }
@@ -224,46 +227,25 @@
 
     for (var i = 4531; i < 4560; i++) {
         var dir = 'data/CPD' + i + '.PDF';
-        crimes = readfile(dir);
+        crimes = parse_crimes(dir);
         for (var j = 0; j < crimes.length; j++) {
             var crime = crimes[j];
+            var content = '<b>TITLE:</b> ' + crime.type + '<br/>' +
+                '<b>CRIME ID:</b> ' + crime.id + '<br/>' +
+                '<b>DATE:</b> ' + crime.date_occurred + ', ' + crime.time_occurred + '</div><br/>' +
+                '<b>LOCATION:</b> ' + crime.location + '</div><br/>' +
+                '<b>DESCRIPTION:</b> ' + crime.summary + '</div><br/>';
             map.addMarker({
                 lat: 40.04 + 0.13 * Math.random(),
                 lng: -88.3 + 0.13 * Math.random(),
-                content: '<b>TITLE:</b> ' + crime.type + '<br/>' +
-                    '<b>CRIME ID:</b> ' + crime.id + '<br/>' +
-                    '<b>DATE:</b> ' + crime.date_occurred + ', ' + crime.time_occurred + '</div><br/>' +
-                    '<b>LOCATION:</b> ' + crime.location + '</div><br/>' +
-                    '<b>DESCRIPTION:</b> ' + crime.summary + '</div><br/>',
-                icon: pin_icon(crime.summary + crime.type),
+                content: content,
+                icon: pin_icon(crime.summary + ' ' + crime.type),
                 crime: crime
             });
 
-            // map.test({
-            //     address: crime.location,
-            //     success: function(results) {
-            //         console.log(crime.location);
-            //         console.log('***************');
-            //         map.addMarker({
-            //             lat: results[0].geometry.location.lat(),
-            //             lng: results[0].geometry.location.lng(),
-            //             content: crime.location + '\n' + crime.summary,
-            //             icon: 'icons/abduction.png'
-            //         })
-            //     },
-            //     error: function(status) {
-            //         console.error(status);
-            //     }
-            // })
+
         }
     }
-
-
-    // function condition(marker, start_date, times_filter_index) {
-    //     var date_condition = (new Date(marker.crime.date_occurred)).getTime() > start_date.getTime();
-
-    //     return date_condition;
-    // }
 
     function create_date_condition(start_date) {
         return function(marker) {
@@ -271,7 +253,6 @@
         };
     }
     function create_time_condition(start_hour, end_hour) {
-
         return function(marker) {
             if (marker.crime.time_occurred) {
                 var hm = marker.crime.time_occurred.split(':');
@@ -318,6 +299,7 @@
         }
     }
     var prev_select_all_crimes = true;
+    var prev_select_all_times = true;
 
     function checkbox_changed() {
         if (document.getElementById('all-dates').checked) {
@@ -339,6 +321,13 @@
                 document.getElementById(crime_type).checked = current_select_all_crimes;
             }
             prev_select_all_crimes = current_select_all_crimes;
+        }
+        var current_select_all_times = document.getElementById('all-times').checked;
+        if (current_select_all_times != prev_select_all_times) {
+            for (var i = 0; i < times_filters.length; i++) {
+                times_filters[i].checked = current_select_all_times;
+            }
+            prev_select_all_times = current_select_all_times;
         }
         for (var crime_type in crime_types) {
             check(crime_type, start_date, times_filters);
@@ -369,8 +358,96 @@
     for (var i = 0; i < times_filters.length; i++) {
         times_filters[i].onchange = checkbox_changed;
     }
+    document.getElementById('all-times').onchange = checkbox_changed;
 
 
+    var tip_location = document.getElementById('tip-location');
+    var tip_box = new google.maps.places.SearchBox(tip_location);
+    adjust_bounds(map.gMap);
+    var submitted_markers = [];
+    tip_box.addListener('places_changed', function() {
+        var places = tip_box.getPlaces();
+        if (places.length == 0) {
+            return;
+        }
+        // clear_markers(submitted_markers);
 
+        // for each place, get the icon, name and location.
+        var bounds = new google.maps.LatLngBounds();
+        places.forEach(function(place) {
+            var icon = {
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // create a marker for each place.
+
+            // submitted_markers.push(new google.maps.Marker({
+            //     map: map.gMap,
+            //     title: place.name,
+            //     position: place.geometry.location,
+
+            // }));
+            expand_viewport(place, bounds);
+        });
+        map.gMap.fitBounds(bounds);
+        map.zoom(17);
+    });
+
+
+    $('#fillout-form').submit(function(event) {
+        // get the form data
+        // there are many ways to get this data using jQuery (you can use the class or id also)
+        var crime = {
+            'type': $('#tip-title').val(),
+            'summary' : $('#tip-summary').val(),
+            'location': $('#tip-location').val(),
+            'time_occurred': $('#tip-time').val(),
+            'date_occurred': $('#tip-date').val(),
+            'id': 'UNOFFICIAL REPORT. STILL NEEDS THE VERIFICATION'
+        };
+        var content = '<b>TITLE:</b> ' + crime.type + '<br/>' +
+                '<b>CRIME ID:</b> ' + crime.id + '<br/>' +
+                '<b>DATE:</b> ' + crime.date_occurred + ', ' + crime.time_occurred + '</div><br/>' +
+                '<b>LOCATION:</b> ' + crime.location + '</div><br/>' +
+                '<b>DESCRIPTION:</b> ' + crime.summary + '</div><br/>';
+        map.geocode({
+            address: crime.location,
+            success: function(results) {
+                var lat = results[0].geometry.location.lat();
+                var lng = results[0].geometry.location.lng();
+                var icon = pin_icon(crime.summary + ' ' + crime.type);
+                map.addMarker({
+                    lat: lat,
+                    lng: lng,
+                    content: content,
+                    icon: icon,
+                    crime: crime
+                });
+                // map.gMap.setCenter({lat: lat, lng: lat});
+            },
+            error: function(status) {
+                console.error(status);
+            }
+        })
+        // process the form
+        // $.ajax({
+        //     // type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+        //     // url: 'process', // the url where we want to POST
+        //     data: formData, // our data object
+        //     dataType: 'json', // what type of data do we expect back from the server
+        //     encode: true
+        // })
+        //     // using the done promise callback
+        //     .done(function(data) {
+        //         // log data to the console so we can see
+        //         // here we will handle errors and validation messages
+        //     });
+        // stop the form from submitting the normal way and refreshing the page
+        event.preventDefault();
+    });
 
 }(window, window.SafeRoutes || (window.SafeRoutes = {})));

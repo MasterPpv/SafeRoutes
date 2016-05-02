@@ -1,6 +1,6 @@
 var sidebar_showing = false;
 var current_sidebar_index = -1;
-var sidebars = [document.getElementById('sidebar-menu'), document.getElementById('sidebar-dir')];
+var sidebars = [document.getElementById('sidebar-menu'), document.getElementById('sidebar-dir'), document.getElementById('sidebar-submit')];
 
 function change_sidebar(new_sidebar_index){
     if (sidebar_showing) {

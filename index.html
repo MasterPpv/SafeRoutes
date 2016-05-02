@@ -68,6 +68,7 @@
                 <input type="checkbox" name="times" id="slot-6" checked>[3 PM, 6 PM)<br/>
                 <input type="checkbox" name="times" id="slot-7" checked>[6 PM, 9 PM)<br/>
                 <input type="checkbox" name="times" id="slot-8" checked>[9 PM, 12 AM)<br/>
+                <input type="checkbox" name="times-all" id="all-times" checked>Select All<br/>
             </fieldset>
         </form></br>
     </div>
@@ -76,6 +77,39 @@
         <img src="menu.png" height="26"></button>
     </div>
 
+    <div id="sidebar-submit">
+        <form id="fillout-form" action="demo_form.asp" method="get">
+            <fieldset>
+            <legend>Submit a Crime Tip</legend>
+                <table>
+                    <tr>
+                        <td>Title</td><td><input type="text" id="tip-title" checked><br/></td>
+                    </tr>
+                    <tr>
+                        <td>Date</td><td><input type="text" id="tip-date" checked><br/></td>
+                    </tr>
+                    <tr>
+                        <td>Time</td><td><input type="text" id="tip-time" checked><br/></td>
+                    </tr>
+                    <tr>
+                        <td>Location</td><td><input type="text" id="tip-location" checked><br/></td>
+                    </tr>
+                    <tr>
+                        <td>Summary</td><td><input type="text" id="tip-summary" checked><br/></td>
+                    </tr>
+                </table>
+                <div id="button-form-button">
+                    <button type="submit">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div id="button-submit" onclick="change_sidebar(2);">
+        <button type="submit" title="Submit a Crime Tip">
+        <img src="submit.png" height="26"></button>
+    </div>
+
+    <script src="jquery-2.2.3.min.js"></script>
     <script src="sidebars.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADABTiyYs23aBwbA2o_f17dKTEB-zGyUY&libraries=places" type="text/javascript"></script>
     <script src="markerclusterer.js"></script>
