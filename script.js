@@ -159,9 +159,21 @@
         }, function (response, status) {
             if (status === google.maps.DirectionsStatus.OK) {
                 for (var i = 0; i < response.routes.length; i++) {
-                    var rating = Math.floor(50 * Math.random() + 50) / 10;
-                    response.routes[i].summary += "  (" + rating + ")";
+                    var rating = Math.floor(50 * Math.random() + 40) / 10;
+                    var keyword;
+                    if (8 <= rating) {
+                        keyword = 'Safe';
+                    }
+                    if (6 <= rating && rating < 8) {
+                        keyword = 'Somewhat Unsafe';
+                    }
+                    if (rating < 6) {
+                        keyword = 'Unsafe';
+                    }
+                    response.routes[i].summary += '  (' + rating + ': ' + keyword + ')';
+                    // console.log(response.routes[i]);
                 }
+                // console.log(response);
                 directionsDisplay.setDirections(response);
             } else {
                 window.alert('Directions request failed due to ' + status);
@@ -242,8 +254,6 @@
                 icon: pin_icon(crime.summary + ' ' + crime.type),
                 crime: crime
             });
-
-
         }
     }
 
